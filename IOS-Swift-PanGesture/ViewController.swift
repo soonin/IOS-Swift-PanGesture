@@ -10,14 +10,21 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var imageView: UIImageView!
+    var panGesture  = UIPanGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(ViewController.draggedView(_:)))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(panGesture)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @objc func draggedView(_ sender:UIPanGestureRecognizer){
+        self.view.bringSubview(toFront: imageView)
+        let translation = sender.translation(in: self.view)
+        imageView.center = CGPoint(x: imageView.center.x + translation.x, y: imageView.center.y + translation.y)
+        sender.setTranslation(CGPoint.zero, in: self.view)
     }
 
 
